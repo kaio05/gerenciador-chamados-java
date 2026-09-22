@@ -4,6 +4,7 @@ public final class ValidationLimits {
 
     public static final int DEFAULT_TEXT_MAX_LENGTH = 255;
     public static final int BLOCO_IDENTIFICACAO_MAX_LENGTH = 255;
+    public static final int AREA_IDENTIFICACAO_MAX_LENGTH = 255;
     public static final int USUARIO_NOME_MAX_LENGTH = 255;
     public static final int USUARIO_EMAIL_MAX_LENGTH = 255;
     public static final int USUARIO_SENHA_MAX_LENGTH = 255;

@@ -4,6 +4,7 @@ import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
 import br.com.dunnastecnologia.chamados.domain.model.Bloco;
+import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Colaborador;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
@@ -15,6 +16,7 @@ import br.com.dunnastecnologia.chamados.domain.model.Usuario;
 import br.com.dunnastecnologia.chamados.infrastructure.exception.BusinessRuleException;
 import br.com.dunnastecnologia.chamados.infrastructure.exception.ResourceNotFoundException;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.BlocoRepository;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.AreaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.MoradorRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
@@ -37,6 +39,7 @@ import java.util.UUID;
 public class AdminService implements AdminUseCases {
 
     private final BlocoRepository blocoRepository;
+    private final AreaRepository areaRepository;
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
     private final UsuarioService usuarioService;
@@ -48,6 +51,7 @@ public class AdminService implements AdminUseCases {
 
     public AdminService(
             BlocoRepository blocoRepository,
+            AreaRepository areaRepository,
             MoradorRepository moradorRepository,
             UnidadeRepository unidadeRepository,
             UsuarioService usuarioService,
@@ -58,6 +62,7 @@ public class AdminService implements AdminUseCases {
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.blocoRepository = blocoRepository;
+        this.areaRepository = areaRepository;
         this.moradorRepository = moradorRepository;
         this.unidadeRepository = unidadeRepository;
         this.usuarioService = usuarioService;
@@ -306,5 +311,10 @@ public class AdminService implements AdminUseCases {
     @Transactional
     public Comentario comentarChamado(AuthenticatedUser admin, UUID chamadoId, String mensagem) {
         return comentarioService.comentar(admin, chamadoId, mensagem);
+    }
+
+    @Override
+    public PageResult<Area> listarAreas(PageRequest pageRequest) {
+        return PageResultMapper.fromPage(areaRepository.findAll(pageRequest));
     }
 }

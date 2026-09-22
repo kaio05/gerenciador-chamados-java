@@ -3,6 +3,7 @@ package br.com.dunnastecnologia.chamados.infrastructure.controller.web;
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
 import br.com.dunnastecnologia.chamados.domain.model.Bloco;
+import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
@@ -297,5 +298,12 @@ public class WebControllerSupport {
             long tamanhoBytes,
             byte[] conteudo
     ) {
+    }
+
+    public Map<String, Object> toAreaMap(Area area) {
+        return Map.of(
+                "id", area.getId(),
+                "identificacao", area.getIdentificacao()
+        );
     }
 }

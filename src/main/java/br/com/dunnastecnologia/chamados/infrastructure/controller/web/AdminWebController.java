@@ -599,4 +599,25 @@ public class AdminWebController {
         }
         return STATUS_RESERVADOS.stream().anyMatch(reservado -> reservado.equalsIgnoreCase(nome));
     }
+
+    /////////////////////////
+    /// 
+    @Operation(summary = "Lista os areas cadastrados", tags = "02 - Admin Web - Paginas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagina de listagem de areas renderizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")
+    })
+    @GetMapping({"/areas", "/areas/"})
+    @Transactional(readOnly = true)
+    public String listarAreas(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            Model model
+    ) {
+        var areas = adminUseCases.listarAreas(support.pageRequest(page, size));
+        model.addAttribute("pageTitle", "Areas");
+        model.addAttribute("areas", support.mapContent(areas.content(), support::toAreaMap));
+        model.addAttribute("areasPage", support.pageMetadata(areas));
+        return "admin/areas/lista";
+    }
 }

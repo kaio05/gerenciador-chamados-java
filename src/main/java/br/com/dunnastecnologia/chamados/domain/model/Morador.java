@@ -3,12 +3,14 @@ package br.com.dunnastecnologia.chamados.domain.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +26,9 @@ public class Morador extends Usuario {
             inverseJoinColumns = @JoinColumn(name = "unidade_id")
     )
     private Set<Unidade> unidades = new HashSet<>();
+
+    @OneToMany(mappedBy = "morador")
+    private List<Reserva> reservas;
 
     @Override
     public String getRole() {
