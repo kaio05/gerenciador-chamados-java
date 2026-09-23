@@ -294,5 +294,10 @@ public interface AdminUseCases {
             String mensagem
     );
 
+    Area cadastrarArea(
+            AuthenticatedUser admin,
+            String identificacao
+    );
+
     PageResult<Area> listarAreas(PageRequest pageRequest);
 }

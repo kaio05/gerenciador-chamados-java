@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%@ include file="/WEB-INF/jsp/fragments/head.jspf" %>
-<body data-page="admin-blocos">
+<body data-page="admin-areas">
 <div class="app-shell">
     <%@ include file="/WEB-INF/jsp/fragments/sidebar.jspf" %>
     <div class="app-main">
@@ -15,26 +15,16 @@
                     <div class="section-header">
                         <div>
                             <p class="eyebrow">Cadastro</p>
-                            <h2>Novo bloco</h2>
+                            <h2>Nova area</h2>
                         </div>
                     </div>
-                    <form method="post" action="${ctx}/admin/blocos" class="stack-form">
+                    <form method="post" action="${ctx}/admin/areas" class="stack-form">
                         <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
                         <label class="field">
                             <span>Identificacao</span>
-                            <input type="text" name="identificacao" value="${blocoForm.identificacao}" placeholder="Bloco A" maxlength="255" required>
+                            <input type="text" name="identificacao" value="${areaForm.identificacao}" placeholder="Area A" maxlength="255" required>
                         </label>
-                        <div class="form-grid">
-                            <label class="field">
-                                <span>Andares</span>
-                                <input type="number" name="quantidadeAndares" min="1" value="${blocoForm.quantidadeAndares}" required>
-                            </label>
-                            <label class="field">
-                                <span>Apartamentos por andar</span>
-                                <input type="number" name="apartamentosPorAndar" min="1" value="${blocoForm.apartamentosPorAndar}" required>
-                            </label>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Cadastrar bloco</button>
+                        <button type="submit" class="btn btn-primary">Cadastrar area</button>
                     </form>
                 </article>
 
@@ -42,40 +32,31 @@
                     <div class="section-header">
                         <div>
                             <p class="eyebrow">Lista</p>
-                            <h2>Blocos cadastrados</h2>
+                            <h2>Areas cadastradas</h2>
                         </div>
                         <div class="toolbar-inline">
-                            <input type="search" class="table-search" placeholder="Filtrar localmente" data-filter-input data-filter-target="blocos-table">
+                            <input type="search" class="table-search" placeholder="Filtrar localmente" data-filter-input data-filter-target="areas-table">
                         </div>
                     </div>
 
                     <c:choose>
-                        <c:when test="${empty blocos}">
+                        <c:when test="${empty areas}">
                             <div class="empty-state">
-                                <h3>Nenhum bloco cadastrado</h3>
-                                <p>Cadastre o primeiro bloco para gerar as unidades automaticamente.</p>
+                                <h3>Nenhuma area cadastrada</h3>
                             </div>
                         </c:when>
                         <c:otherwise>
                             <div class="table-wrap">
-                                <table class="data-table" data-filter-table="blocos-table">
+                                <table class="data-table" data-filter-table="areas-table">
                                     <thead>
                                     <tr>
                                         <th>Identificacao</th>
-                                        <th>Andares</th>
-                                        <th>Aptos/andar</th>
-                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${blocos}" var="bloco">
+                                    <c:forEach items="${areas}" var="area">
                                         <tr>
-                                            <td>${bloco.identificacao}</td>
-                                            <td>${bloco.quantidadeAndares}</td>
-                                            <td>${bloco.apartamentosPorAndar}</td>
-                                            <td class="cell-actions">
-                                                <a href="${ctx}/admin/blocos/${bloco.id}" class="btn btn-link">Ver unidades</a>
-                                            </td>
+                                            <td>${area.identificacao}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -85,12 +66,12 @@
                     </c:choose>
 
                     <div class="pagination">
-                        <c:if test="${blocosPage.hasPrevious}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/blocos?page=${blocosPage.page - 1}&size=${blocosPage.size}">Anterior</a>
+                        <c:if test="${areasPage.hasPrevious}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/areas?page=${areasPage.page - 1}&size=${areasPage.size}">Anterior</a>
                         </c:if>
-                        <span>Pagina ${blocosPage.page + 1} de ${blocosPage.totalPages == 0 ? 1 : blocosPage.totalPages}</span>
-                        <c:if test="${blocosPage.hasNext}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/blocos?page=${blocosPage.page + 1}&size=${blocosPage.size}">Proxima</a>
+                        <span>Pagina ${areasPage.page + 1} de ${areasPage.totalPages == 0 ? 1 : areasPage.totalPages}</span>
+                        <c:if test="${areasPage.hasNext}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/areas?page=${areasPage.page + 1}&size=${areasPage.size}">Proxima</a>
                         </c:if>
                     </div>
                 </article>

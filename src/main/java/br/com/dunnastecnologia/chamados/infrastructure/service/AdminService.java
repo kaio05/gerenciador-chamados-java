@@ -314,6 +314,25 @@ public class AdminService implements AdminUseCases {
     }
 
     @Override
+    @Transactional
+    public Area cadastrarArea(AuthenticatedUser admin, String identificacao) {
+        authenticatedUserValidator.assertAdministrador(admin);
+        String identificacaoNormalizada = InputValidationSupport.normalizeRequiredText(
+                identificacao,
+                "Identificacao da area e obrigatoria",
+                "Identificacao da area deve ter no maximo 255 caracteres",
+                ValidationLimits.AREA_IDENTIFICACAO_MAX_LENGTH
+        );
+
+        Area area = new Area();
+        area.setIdentificacao(identificacaoNormalizada);
+
+        Area savedArea = areaRepository.save(area);
+        return areaRepository.findById(savedArea.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Area nao encontrada apos cadastro"));
+    }
+
+    @Override
     public PageResult<Area> listarAreas(PageRequest pageRequest) {
         return PageResultMapper.fromPage(areaRepository.findAll(pageRequest));
     }
