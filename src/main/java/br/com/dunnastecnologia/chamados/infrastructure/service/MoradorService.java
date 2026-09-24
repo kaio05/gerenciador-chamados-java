@@ -9,7 +9,6 @@ import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.PageResultMapper;
-import br.com.dunnastecnologia.chamados.infrastructure.repository.ReservaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -23,20 +22,20 @@ import java.util.UUID;
 public class MoradorService implements MoradorUseCases {
 
     private final UnidadeRepository unidadeRepository;
-    private final ReservaRepository reservaRepository;
+    private final ReservaService reservaService;
     private final ChamadoService chamadoService;
     private final ComentarioService comentarioService;
     private final AuthenticatedUserValidator authenticatedUserValidator;
 
     public MoradorService(
             UnidadeRepository unidadeRepository,
-            ReservaRepository reservaRepository,
+            ReservaService reservaService,
             ChamadoService chamadoService,
             ComentarioService comentarioService,
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.unidadeRepository = unidadeRepository;
-        this.reservaRepository = reservaRepository;
+        this.reservaService = reservaService;
         this.chamadoService = chamadoService;
         this.comentarioService = comentarioService;
         this.authenticatedUserValidator = authenticatedUserValidator;
@@ -84,7 +83,7 @@ public class MoradorService implements MoradorUseCases {
     }
 
     @Override
-    public PageResult<Reserva> listarReservas(PageRequest pageRequest) {
-        return PageResultMapper.fromPage(reservaRepository.findAll(pageRequest));
+    public PageResult<Reserva> listarMinhasReservas(AuthenticatedUser morador, PageRequest pageRequest) {
+        return reservaService.listarReservasDoMorador(morador, pageRequest);
     }
 }

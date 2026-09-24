@@ -308,7 +308,7 @@ public class WebControllerSupport {
         );
     }
 
-    public Map<String, Object> toAreaMap(Reserva reserva) {
+    public Map<String, Object> toReservaMap(Reserva reserva) {
         return Map.of(
                 "id", reserva.getId(),
                 "areaIdentificacao", reserva.getArea().getIdentificacao(),

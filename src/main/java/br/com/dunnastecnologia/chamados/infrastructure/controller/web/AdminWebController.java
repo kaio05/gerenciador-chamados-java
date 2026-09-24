@@ -635,7 +635,7 @@ public class AdminWebController {
     ) {
         var reservas = adminUseCases.listarReservas(support.pageRequest(page, size));
         model.addAttribute("pageTitle", "Reservas");
-        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toAreaMap));
+        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toReservaMap));
         model.addAttribute("reservasPage", support.pageMetadata(reservas));
         return "admin/reservas/lista";
     }

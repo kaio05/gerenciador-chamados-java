@@ -130,23 +130,23 @@ public class ChamadoService implements ChamadoUseCase {
 
     @Override
     public PageResult<Chamado> listarChamadosDoMorador(
-            AuthenticatedUser morador,
-            UUID statusId,
-            UUID unidadeId,
-            UUID tipoChamadoId,
-            LocalDate dataAbertura,
-            PageRequest pageRequest
+        AuthenticatedUser morador,
+        UUID statusId,
+        UUID unidadeId,
+        UUID tipoChamadoId,
+        LocalDate dataAbertura,
+        PageRequest pageRequest
     ) {
         authenticatedUserValidator.assertMorador(morador);
         return PageResultMapper.fromPage(
-                chamadoRepository.buscarParaMorador(
-                        morador.id(),
-                        statusId,
-                        unidadeId,
-                        tipoChamadoId,
-                        dataAbertura,
-                        pageRequest
-                )
+            chamadoRepository.buscarParaMorador(
+                morador.id(),
+                statusId,
+                unidadeId,
+                tipoChamadoId,
+                dataAbertura,
+                pageRequest
+            )
         );
     }
 

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%@ include file="/WEB-INF/jsp/fragments/head.jspf" %>
-<body data-page="morador-chamados">
+<body data-page="admin-reservas">
 <div class="app-shell">
     <%@ include file="/WEB-INF/jsp/fragments/sidebar.jspf" %>
     <div class="app-main">
@@ -10,99 +10,111 @@
         <main class="page-content">
             <%@ include file="/WEB-INF/jsp/fragments/alerts.jspf" %>
 
-            <section class="card">
-                <div class="section-header">
-                    <div>
-                        <p class="eyebrow">Historico</p>
-                        <h2>Meus chamados</h2>
-                    </div>
-                    <a href="${ctx}/morador/chamados/novo" class="btn btn-primary">Abrir chamado</a>
-                </div>
-
-                <form method="get" action="${ctx}/morador/chamados" class="filter-grid">
-                    <label class="field">
-                        <span>Status</span>
-                        <select name="statusId">
-                            <option value="">Todos</option>
-                            <c:forEach items="${statusDisponiveis}" var="status">
-                                <option value="${status.id}" ${filtroStatusId eq status.id ? 'selected' : ''}>${status.nome}</option>
-                            </c:forEach>
-                        </select>
-                    </label>
-                    <label class="field">
-                        <span>Unidade</span>
-                        <select name="unidadeId">
-                            <option value="">Todas</option>
-                            <c:forEach items="${unidadesDisponiveis}" var="unidade">
-                                <option value="${unidade.id}" ${filtroUnidadeId eq unidade.id ? 'selected' : ''}>${unidade.identificacao}</option>
-                            </c:forEach>
-                        </select>
-                    </label>
-                    <label class="field">
-                        <span>Tipo</span>
-                        <select name="tipoChamadoId">
-                            <option value="">Todos</option>
-                            <c:forEach items="${tiposChamadoDisponiveis}" var="tipo">
-                                <option value="${tipo.id}" ${filtroTipoChamadoId eq tipo.id ? 'selected' : ''}>${tipo.titulo}</option>
-                            </c:forEach>
-                        </select>
-                    </label>
-                    <label class="field">
-                        <span>Data de abertura</span>
-                        <input type="date" name="dataAbertura" value="${filtroDataAbertura}">
-                    </label>
-                    <div class="button-row align-end">
-                        <button type="submit" class="btn btn-primary">Filtrar</button>
-                        <a href="${ctx}/morador/chamados" class="btn btn-secondary">Limpar</a>
-                    </div>
-                </form>
-
-                <c:choose>
-                    <c:when test="${empty chamados}">
-                        <div class="empty-state">
-                            <h3>Nenhum chamado registrado</h3>
-                            <p>Use a abertura de chamado para registrar a primeira ocorrencia.</p>
+            <section class="two-column-grid">
+                <article class="card">
+                    <div class="section-header">
+                        <div>
+                            <p class="eyebrow">Cadastro</p>
+                            <h2>Nova reserva</h2>
                         </div>
-                    </c:when>
-                    <c:otherwise>
-                        <div class="table-wrap">
-                            <table class="data-table">
-                                <thead>
-                                <tr>
-                                    <th>Unidade</th>
-                                    <th>Tipo</th>
-                                    <th>Status</th>
-                                    <th>Abertura</th>
-                                    <th></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <c:forEach items="${chamados}" var="chamado">
-                                    <tr>
-                                        <td>${chamado.unidadeIdentificacao}</td>
-                                        <td>${chamado.tipoChamadoTitulo}</td>
-                                        <td><span class="status-pill">${chamado.statusNome}</span></td>
-                                        <td>${chamado.dataAberturaFormatada}</td>
-                                        <td class="cell-actions">
-                                            <a href="${ctx}/morador/chamados/${chamado.id}" class="btn btn-link">Acompanhar</a>
-                                        </td>
-                                    </tr>
+                    </div>
+                    <form method="post" action="${ctx}/admin/reservas" class="stack-form">
+                        <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+
+                        <label class="field">
+                            <span>Area</span>
+                            <select name="areaId" required>
+                                <option value="">Selecione uma area</option>
+
+                                <c:forEach var="area" items="${areas}">
+                                    <option value="${area.id}"
+                                        ${reservaForm.areaId == area.id ? 'selected' : ''}>
+                                        ${area.identificacao}
+                                    </option>
                                 </c:forEach>
-                                </tbody>
-                            </table>
-                        </div>
-                    </c:otherwise>
-                </c:choose>
+                            </select>
+                        </label>
 
-                <div class="pagination">
-                    <c:if test="${chamadosPage.hasPrevious}">
-                        <a class="btn btn-secondary" href="${ctx}/morador/chamados?page=${chamadosPage.page - 1}&size=${chamadosPage.size}&statusId=${filtroStatusId}&unidadeId=${filtroUnidadeId}&tipoChamadoId=${filtroTipoChamadoId}&dataAbertura=${filtroDataAbertura}">Anterior</a>
-                    </c:if>
-                    <span>Pagina ${chamadosPage.page + 1} de ${chamadosPage.totalPages == 0 ? 1 : chamadosPage.totalPages}</span>
-                    <c:if test="${chamadosPage.hasNext}">
-                        <a class="btn btn-secondary" href="${ctx}/morador/chamados?page=${chamadosPage.page + 1}&size=${chamadosPage.size}&statusId=${filtroStatusId}&unidadeId=${filtroUnidadeId}&tipoChamadoId=${filtroTipoChamadoId}&dataAbertura=${filtroDataAbertura}">Proxima</a>
-                    </c:if>
-                </div>
+                        <label class="field">
+                            <span>Data</span>
+                            <input
+                                type="date"
+                                name="data"
+                                value="${reservaForm.data}"
+                                required>
+                        </label>
+
+                        <label class="field">
+                            <span>Horario de inicio</span>
+                            <input
+                                type="time"
+                                name="horarioInicio"
+                                value="${reservaForm.horarioInicio}"
+                                required>
+                        </label>
+
+                        <label class="field">
+                            <span>Horario de fim</span>
+                            <input
+                                type="time"
+                                name="horarioFim"
+                                value="${reservaForm.horarioFim}"
+                                required>
+                        </label>
+
+                        <button type="submit" class="btn btn-primary">
+                            Cadastrar reserva
+                        </button>
+                    </form>
+                </article>
+
+                <article class="card">
+                    <div class="section-header">
+                        <div>
+                            <p class="eyebrow">Lista</p>
+                            <h2>Reservas cadastradas</h2>
+                        </div>
+                        <div class="toolbar-inline">
+                            <input type="search" class="table-search" placeholder="Filtrar localmente" data-filter-input data-filter-target="reservas-table">
+                        </div>
+                    </div>
+
+                    <c:choose>
+                        <c:when test="${empty reservas}">
+                            <div class="empty-state">
+                                <h3>Nenhuma reserva cadastrada</h3>
+                            </div>
+                        </c:when>
+                        <c:otherwise>
+                            <div class="table-wrap">
+                                <table class="data-table" data-filter-table="reservas-table">
+                                    <thead>
+                                    <tr>
+                                        <th>Identificacao</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <c:forEach items="${reservas}" var="reserva">
+                                        <tr>
+                                            <td>${reserva.id}</td>
+                                        </tr>
+                                    </c:forEach>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </c:otherwise>
+                    </c:choose>
+
+                    <div class="pagination">
+                        <c:if test="${reservasPage.hasPrevious}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page - 1}&size=${reservasPage.size}">Anterior</a>
+                        </c:if>
+                        <span>Pagina ${reservasPage.page + 1} de ${reservasPage.totalPages == 0 ? 1 : reservasPage.totalPages}</span>
+                        <c:if test="${reservasPage.hasNext}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page + 1}&size=${reservasPage.size}">Proxima</a>
+                        </c:if>
+                    </div>
+                </article>
             </section>
         </main>
     </div>

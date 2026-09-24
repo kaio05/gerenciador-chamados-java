@@ -69,5 +69,5 @@ public interface MoradorUseCases {
             UUID chamadoId
     );
 
-    PageResult<Reserva> listarReservas(PageRequest pageRequest);
+    PageResult<Reserva> listarMinhasReservas(AuthenticatedUser currentUser, PageRequest pageRequest);
 }

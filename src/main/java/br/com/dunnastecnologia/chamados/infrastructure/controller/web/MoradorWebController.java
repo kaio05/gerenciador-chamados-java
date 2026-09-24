@@ -1,5 +1,6 @@
 package br.com.dunnastecnologia.chamados.infrastructure.controller.web;
 
+import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
 import br.com.dunnastecnologia.chamados.application.UserCase.AnexoChamadoUseCases;
 import br.com.dunnastecnologia.chamados.application.UserCase.ComentarioUseCase;
 import br.com.dunnastecnologia.chamados.application.UserCase.MoradorUseCases;
@@ -35,6 +36,7 @@ public class MoradorWebController {
     private final StatusChamadoUseCase statusChamadoUseCase;
     private final AnexoChamadoUseCases anexoChamadoUseCases;
     private final ComentarioUseCase comentarioUseCase;
+    private final AdminUseCases adminUseCases;
     private final WebControllerSupport support;
 
     public MoradorWebController(
@@ -43,10 +45,12 @@ public class MoradorWebController {
             StatusChamadoUseCase statusChamadoUseCase,
             AnexoChamadoUseCases anexoChamadoUseCases,
             ComentarioUseCase comentarioUseCase,
+            AdminUseCases adminUseCases,
             WebControllerSupport support
     ) {
         this.moradorUseCases = moradorUseCases;
         this.tipoChamadoUseCase = tipoChamadoUseCase;
+        this.adminUseCases = adminUseCases;
         this.statusChamadoUseCase = statusChamadoUseCase;
         this.anexoChamadoUseCases = anexoChamadoUseCases;
         this.comentarioUseCase = comentarioUseCase;
@@ -184,22 +188,27 @@ public class MoradorWebController {
         );
         return "morador/chamados/detalhe";
     }
-
-    @Operation(summary = "Lista as reservas cadastradas", tags = "02 - Admin Web - Paginas")
+	
+	@GetMapping({"/reservas", "/reservas/"})
+	@Transactional(readOnly = true)
+    @Operation(summary = "Lista as reservas do morador com paginacao", tags = "02 - Admin Web - Paginas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pagina de listagem de reservas renderizada com sucesso."),
             @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")
     })
-    @GetMapping({"/reservas", "/reservas/"})
-    @Transactional(readOnly = true)
     public String listarReservas(
-            @RequestParam(defaultValue = "0") Integer page,
-            @RequestParam(defaultValue = "10") Integer size,
-            Model model
+		Authentication authentication,
+		@RequestParam(defaultValue = "0") Integer page,
+		@RequestParam(defaultValue = "10") Integer size,
+		Model model
     ) {
-        var reservas = moradorUseCases.listarReservas(support.pageRequest(page, size));
+        var currentUser = support.authenticatedUser(authentication);
+        var reservas = moradorUseCases.listarMinhasReservas(currentUser, support.pageRequest(page, size));
+        var areas = adminUseCases.listarAreas(support.pageRequest(page, size));
+        System.out.println(areas);
         model.addAttribute("pageTitle", "Reservas");
-        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toAreaMap));
+        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toReservaMap));
+        model.addAttribute("areas", support.mapContent(areas.content(), support::toAreaMap));
         model.addAttribute("reservasPage", support.pageMetadata(reservas));
         return "morador/reservas/lista";
     }
