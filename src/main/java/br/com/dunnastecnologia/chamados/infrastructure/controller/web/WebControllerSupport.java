@@ -6,6 +6,7 @@ import br.com.dunnastecnologia.chamados.domain.model.Bloco;
 import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
+import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
 import br.com.dunnastecnologia.chamados.domain.model.TipoChamado;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
@@ -304,6 +305,18 @@ public class WebControllerSupport {
         return Map.of(
                 "id", area.getId(),
                 "identificacao", area.getIdentificacao()
+        );
+    }
+
+    public Map<String, Object> toAreaMap(Reserva reserva) {
+        return Map.of(
+                "id", reserva.getId(),
+                "areaIdentificacao", reserva.getArea().getIdentificacao(),
+                "moradorNome", reserva.getMorador().getNome(),
+                "status", reserva.getStatus(),
+                "data", reserva.getData(),
+                "horarioInicio", reserva.getHorarioInicio(),
+                "horarioFim", reserva.getHorarioFim()
         );
     }
 }

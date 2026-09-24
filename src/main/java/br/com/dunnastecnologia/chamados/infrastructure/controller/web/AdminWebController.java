@@ -602,7 +602,7 @@ public class AdminWebController {
 
     /////////////////////////
     /// 
-    @Operation(summary = "Lista os areas cadastrados", tags = "02 - Admin Web - Paginas")
+    @Operation(summary = "Lista as areas cadastradas", tags = "02 - Admin Web - Paginas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pagina de listagem de areas renderizada com sucesso."),
             @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")
@@ -619,5 +619,24 @@ public class AdminWebController {
         model.addAttribute("areas", support.mapContent(areas.content(), support::toAreaMap));
         model.addAttribute("areasPage", support.pageMetadata(areas));
         return "admin/areas/lista";
+    }
+
+    @Operation(summary = "Lista as reservas cadastradas", tags = "02 - Admin Web - Paginas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagina de listagem de reservas renderizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")
+    })
+    @GetMapping({"/reservas", "/reservas/"})
+    @Transactional(readOnly = true)
+    public String listarReservas(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            Model model
+    ) {
+        var reservas = adminUseCases.listarReservas(support.pageRequest(page, size));
+        model.addAttribute("pageTitle", "Reservas");
+        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toAreaMap));
+        model.addAttribute("reservasPage", support.pageMetadata(reservas));
+        return "admin/reservas/lista";
     }
 }

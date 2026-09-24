@@ -184,4 +184,23 @@ public class MoradorWebController {
         );
         return "morador/chamados/detalhe";
     }
+
+    @Operation(summary = "Lista as reservas cadastradas", tags = "02 - Admin Web - Paginas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagina de listagem de reservas renderizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")
+    })
+    @GetMapping({"/reservas", "/reservas/"})
+    @Transactional(readOnly = true)
+    public String listarReservas(
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size,
+            Model model
+    ) {
+        var reservas = moradorUseCases.listarReservas(support.pageRequest(page, size));
+        model.addAttribute("pageTitle", "Reservas");
+        model.addAttribute("reservas", support.mapContent(reservas.content(), support::toAreaMap));
+        model.addAttribute("reservasPage", support.pageMetadata(reservas));
+        return "morador/reservas/lista";
+    }
 }

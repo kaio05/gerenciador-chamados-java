@@ -5,9 +5,11 @@ import br.com.dunnastecnologia.chamados.application.UserCase.MoradorUseCases;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
+import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.PageResultMapper;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.ReservaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -21,17 +23,20 @@ import java.util.UUID;
 public class MoradorService implements MoradorUseCases {
 
     private final UnidadeRepository unidadeRepository;
+    private final ReservaRepository reservaRepository;
     private final ChamadoService chamadoService;
     private final ComentarioService comentarioService;
     private final AuthenticatedUserValidator authenticatedUserValidator;
 
     public MoradorService(
             UnidadeRepository unidadeRepository,
+            ReservaRepository reservaRepository,
             ChamadoService chamadoService,
             ComentarioService comentarioService,
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.unidadeRepository = unidadeRepository;
+        this.reservaRepository = reservaRepository;
         this.chamadoService = chamadoService;
         this.comentarioService = comentarioService;
         this.authenticatedUserValidator = authenticatedUserValidator;
@@ -76,5 +81,10 @@ public class MoradorService implements MoradorUseCases {
     @Transactional
     public Chamado reabrirChamado(AuthenticatedUser morador, UUID chamadoId) {
         return chamadoService.reabrirComoMorador(morador, chamadoId);
+    }
+
+    @Override
+    public PageResult<Reserva> listarReservas(PageRequest pageRequest) {
+        return PageResultMapper.fromPage(reservaRepository.findAll(pageRequest));
     }
 }

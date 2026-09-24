@@ -9,6 +9,7 @@ import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Colaborador;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.Morador;
+import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
 import br.com.dunnastecnologia.chamados.domain.model.TipoChamado;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
@@ -18,6 +19,7 @@ import br.com.dunnastecnologia.chamados.infrastructure.exception.ResourceNotFoun
 import br.com.dunnastecnologia.chamados.infrastructure.repository.BlocoRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.AreaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.MoradorRepository;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.ReservaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.InputValidationSupport;
@@ -40,6 +42,7 @@ public class AdminService implements AdminUseCases {
 
     private final BlocoRepository blocoRepository;
     private final AreaRepository areaRepository;
+    private final ReservaRepository reservaRepository;
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
     private final UsuarioService usuarioService;
@@ -52,6 +55,7 @@ public class AdminService implements AdminUseCases {
     public AdminService(
             BlocoRepository blocoRepository,
             AreaRepository areaRepository,
+            ReservaRepository reservaRepository,
             MoradorRepository moradorRepository,
             UnidadeRepository unidadeRepository,
             UsuarioService usuarioService,
@@ -63,6 +67,7 @@ public class AdminService implements AdminUseCases {
     ) {
         this.blocoRepository = blocoRepository;
         this.areaRepository = areaRepository;
+        this.reservaRepository = reservaRepository;
         this.moradorRepository = moradorRepository;
         this.unidadeRepository = unidadeRepository;
         this.usuarioService = usuarioService;
@@ -335,5 +340,10 @@ public class AdminService implements AdminUseCases {
     @Override
     public PageResult<Area> listarAreas(PageRequest pageRequest) {
         return PageResultMapper.fromPage(areaRepository.findAll(pageRequest));
+    }
+
+    @Override
+    public PageResult<Reserva> listarReservas(PageRequest pageRequest) {
+        return PageResultMapper.fromPage(reservaRepository.findAll(pageRequest));
     }
 }

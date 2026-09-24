@@ -8,6 +8,7 @@ import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Colaborador;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.Morador;
+import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.StatusChamado;
 import br.com.dunnastecnologia.chamados.domain.model.TipoChamado;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
@@ -300,4 +301,6 @@ public interface AdminUseCases {
     );
 
     PageResult<Area> listarAreas(PageRequest pageRequest);
+    
+    PageResult<Reserva> listarReservas(PageRequest pageRequest);
 }
