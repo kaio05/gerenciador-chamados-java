@@ -304,5 +304,9 @@ public interface AdminUseCases {
     
     PageResult<Reserva> listarReservas(PageRequest pageRequest);
 
+    void removerArea(
+            AuthenticatedUser admin,
+            UUID areaId
+    );
     
 }

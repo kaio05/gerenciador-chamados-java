@@ -6,10 +6,15 @@ import br.com.dunnastecnologia.chamados.infrastructure.controller.web.form.AreaF
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+
+import java.util.UUID;
+
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -44,6 +49,17 @@ public class AreaApiController {
                 areaForm.getIdentificacao()
         );
         redirectAttributes.addFlashAttribute("successMessage", "Area cadastrada com sucesso.");
+        return "redirect:/admin/areas";
+    }
+
+    @DeleteMapping("/{areaId}")
+    public String removerArea(
+            Authentication authentication,
+            @PathVariable UUID areaId,
+            RedirectAttributes redirectAttributes
+    ) {
+        adminUseCases.removerArea(support.authenticatedUser(authentication), areaId);
+        redirectAttributes.addFlashAttribute("successMessage", "Area removida com sucesso.");
         return "redirect:/admin/areas";
     }
 }

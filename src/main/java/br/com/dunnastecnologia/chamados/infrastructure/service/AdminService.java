@@ -41,7 +41,7 @@ import java.util.UUID;
 public class AdminService implements AdminUseCases {
 
     private final BlocoRepository blocoRepository;
-    private final AreaRepository areaRepository;
+    private final AreaService areaService;
     private final ReservaRepository reservaRepository;
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
@@ -55,6 +55,7 @@ public class AdminService implements AdminUseCases {
     public AdminService(
             BlocoRepository blocoRepository,
             AreaRepository areaRepository,
+            AreaService areaService,
             ReservaRepository reservaRepository,
             MoradorRepository moradorRepository,
             UnidadeRepository unidadeRepository,
@@ -66,7 +67,7 @@ public class AdminService implements AdminUseCases {
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.blocoRepository = blocoRepository;
-        this.areaRepository = areaRepository;
+        this.areaService = areaService;
         this.reservaRepository = reservaRepository;
         this.moradorRepository = moradorRepository;
         this.unidadeRepository = unidadeRepository;
@@ -321,30 +322,23 @@ public class AdminService implements AdminUseCases {
     @Override
     @Transactional
     public Area cadastrarArea(AuthenticatedUser admin, String identificacao) {
-        authenticatedUserValidator.assertAdministrador(admin);
-        String identificacaoNormalizada = InputValidationSupport.normalizeRequiredText(
-                identificacao,
-                "Identificacao da area e obrigatoria",
-                "Identificacao da area deve ter no maximo 255 caracteres",
-                ValidationLimits.AREA_IDENTIFICACAO_MAX_LENGTH
-        );
-
-        Area area = new Area();
-        area.setIdentificacao(identificacaoNormalizada);
-        area.setStatus(Area.AreaStatus.ATIVA);
-
-        Area savedArea = areaRepository.save(area);
-        return areaRepository.findById(savedArea.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Area nao encontrada apos cadastro"));
+        return areaService.cadastrarArea(admin, identificacao);
     }
 
     @Override
     public PageResult<Area> listarAreas(PageRequest pageRequest) {
-        return PageResultMapper.fromPage(areaRepository.findAll(pageRequest));
+        return areaService.listarAreas(pageRequest);
     }
 
+    @Override
+    @Transactional
+    public void removerArea(AuthenticatedUser admin, UUID areaId) {
+        areaService.removerArea(admin, areaId);
+    }
+    
     @Override
     public PageResult<Reserva> listarReservas(PageRequest pageRequest) {
         return PageResultMapper.fromPage(reservaRepository.findAll(pageRequest));
     }
+
 }
