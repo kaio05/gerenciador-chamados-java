@@ -90,21 +90,21 @@
                                 <table class="data-table" data-filter-table="reservas-table">
                                     <thead>
                                     <tr>
+                                        <th>Status</th>
                                         <th>Area</th>
                                         <th>Data</th>
                                         <th>Horario inicial</th>
                                         <th>Horario final</th>
-                                        <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${reservas}" var="reserva">
                                         <tr>
+                                            <td>${reserva.status}</td>
                                             <td>${reserva.areaIdentificacao}</td>
                                             <td>${reserva.data}</td>
                                             <td>${reserva.horarioInicio}</td>
                                             <td>${reserva.horarioFim}</td>
-                                            <td>${reserva.status}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <%@ include file="/WEB-INF/jsp/fragments/head.jspf" %>
-<body data-page="admin-areas">
+<body data-page="admin-reservas">
 <div class="app-shell">
     <%@ include file="/WEB-INF/jsp/fragments/sidebar.jspf" %>
     <div class="app-main">
@@ -14,49 +14,40 @@
                 <article class="card">
                     <div class="section-header">
                         <div>
-                            <p class="eyebrow">Cadastro</p>
-                            <h2>Nova area</h2>
-                        </div>
-                    </div>
-                    <form method="post" action="${ctx}/admin/areas" class="stack-form">
-                        <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
-                        <label class="field">
-                            <span>Identificacao</span>
-                            <input type="text" name="identificacao" value="${areaForm.identificacao}" placeholder="Area A" maxlength="255" required>
-                        </label>
-                        <button type="submit" class="btn btn-primary">Cadastrar area</button>
-                    </form>
-                </article>
-
-                <article class="card">
-                    <div class="section-header">
-                        <div>
                             <p class="eyebrow">Lista</p>
-                            <h2>Areas cadastradas</h2>
+                            <h2>Reservas dos moradores</h2>
                         </div>
                         <div class="toolbar-inline">
-                            <input type="search" class="table-search" placeholder="Filtrar localmente" data-filter-input data-filter-target="areas-table">
+                            <input type="search" class="table-search" placeholder="Filtrar localmente" data-filter-input data-filter-target="reservas-table">
                         </div>
                     </div>
 
                     <c:choose>
-                        <c:when test="${empty areas}">
+                        <c:when test="${empty reservas}">
                             <div class="empty-state">
-                                <h3>Nenhuma area cadastrada</h3>
+                                <h3>Nenhuma reserva cadastrada</h3>
                             </div>
                         </c:when>
                         <c:otherwise>
                             <div class="table-wrap">
-                                <table class="data-table" data-filter-table="areas-table">
+                                <table class="data-table" data-filter-table="reservas-table">
                                     <thead>
                                     <tr>
-                                        <th>Identificacao</th>
+                                        <th>Status</th>
+                                        <th>Area</th>
+                                        <th>Data</th>
+                                        <th>Horario inicial</th>
+                                        <th>Horario final</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <c:forEach items="${areas}" var="area">
+                                    <c:forEach items="${reservas}" var="reserva">
                                         <tr>
-                                            <td>${area.identificacao}</td>
+                                            <td>${reserva.status}</td>
+                                            <td>${reserva.areaIdentificacao}</td>
+                                            <td>${reserva.data}</td>
+                                            <td>${reserva.horarioInicio}</td>
+                                            <td>${reserva.horarioFim}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -66,12 +57,12 @@
                     </c:choose>
 
                     <div class="pagination">
-                        <c:if test="${areasPage.hasPrevious}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/areas?page=${areasPage.page - 1}&size=${areasPage.size}">Anterior</a>
+                        <c:if test="${reservasPage.hasPrevious}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page - 1}&size=${reservasPage.size}">Anterior</a>
                         </c:if>
-                        <span>Pagina ${areasPage.page + 1} de ${areasPage.totalPages == 0 ? 1 : areasPage.totalPages}</span>
-                        <c:if test="${areasPage.hasNext}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/areas?page=${areasPage.page + 1}&size=${areasPage.size}">Proxima</a>
+                        <span>Pagina ${reservasPage.page + 1} de ${reservasPage.totalPages == 0 ? 1 : reservasPage.totalPages}</span>
+                        <c:if test="${reservasPage.hasNext}">
+                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page + 1}&size=${reservasPage.size}">Proxima</a>
                         </c:if>
                     </div>
                 </article>

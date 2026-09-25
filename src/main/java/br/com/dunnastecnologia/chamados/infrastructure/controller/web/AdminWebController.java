@@ -600,8 +600,6 @@ public class AdminWebController {
         return STATUS_RESERVADOS.stream().anyMatch(reservado -> reservado.equalsIgnoreCase(nome));
     }
 
-    /////////////////////////
-    /// 
     @Operation(summary = "Lista as areas cadastradas", tags = "02 - Admin Web - Paginas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pagina de listagem de areas renderizada com sucesso."),

@@ -81,11 +81,13 @@ public class MoradorWebController {
         var currentUser = support.authenticatedUser(authentication);
         var unidades = moradorUseCases.listarMinhasUnidades(currentUser, support.pageRequest(0, 20));
         var chamados = moradorUseCases.listarMeusChamados(currentUser, null, null, null, null, support.pageRequest(0, 5));
+        var reservas = moradorUseCases.listarMinhasReservas(currentUser, support.pageRequest(0, 10));
 
         model.addAttribute("pageTitle", "Meu Painel");
         model.addAttribute("minhasUnidades", support.mapContent(unidades.content(), support::toUnidadeMap));
         model.addAttribute("meusChamados", support.mapContent(chamados.content(), support::toChamadoMap));
         model.addAttribute("totalUnidades", unidades.totalElements());
+        model.addAttribute("totalReservas", reservas.totalElements());
         model.addAttribute("totalChamados", chamados.totalElements());
         return "morador/dashboard";
     }

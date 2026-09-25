@@ -12,6 +12,10 @@
 
             <section class="stats-grid">
                 <article class="stat-card">
+                    <span>Minhas reservas</span>
+                    <strong>${totalReservas}</strong>
+                </article>
+                <article class="stat-card">
                     <span>Minhas unidades</span>
                     <strong>${totalUnidades}</strong>
                 </article>
