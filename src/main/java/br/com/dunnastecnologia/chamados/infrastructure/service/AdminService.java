@@ -331,6 +331,7 @@ public class AdminService implements AdminUseCases {
 
         Area area = new Area();
         area.setIdentificacao(identificacaoNormalizada);
+        area.setStatus(Area.AreaStatus.ATIVA);
 
         Area savedArea = areaRepository.save(area);
         return areaRepository.findById(savedArea.getId())

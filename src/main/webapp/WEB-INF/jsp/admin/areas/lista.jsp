@@ -50,12 +50,14 @@
                                 <table class="data-table" data-filter-table="areas-table">
                                     <thead>
                                     <tr>
+                                        <th>Status</th>
                                         <th>Identificacao</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${areas}" var="area">
                                         <tr>
+                                            <td>${area.status}</td>
                                             <td>${area.identificacao}</td>
                                         </tr>
                                     </c:forEach>

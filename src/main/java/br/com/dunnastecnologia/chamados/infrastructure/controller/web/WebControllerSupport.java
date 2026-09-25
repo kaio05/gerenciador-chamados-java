@@ -304,7 +304,8 @@ public class WebControllerSupport {
     public Map<String, Object> toAreaMap(Area area) {
         return Map.of(
                 "id", area.getId(),
-                "identificacao", area.getIdentificacao()
+                "identificacao", area.getIdentificacao(),
+                "status", area.getStatus()
         );
     }
 
