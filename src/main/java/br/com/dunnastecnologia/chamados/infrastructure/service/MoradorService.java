@@ -10,6 +10,7 @@ import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.PageResultMapper;
+import br.com.dunnastecnologia.chamados.infrastructure.exception.BusinessRuleException;
 import br.com.dunnastecnologia.chamados.infrastructure.exception.ResourceNotFoundException;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.AreaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.MoradorRepository;
@@ -21,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -117,6 +119,10 @@ public class MoradorService implements MoradorUseCases {
 
         Area area = areaRepository.findById(areaId)
         .orElseThrow(() -> new IllegalArgumentException("Área não encontrada"));
+        if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
+            throw new BusinessRuleException("Morador não pode solicitar reserva para uma area desativada ou retirada");
+        Optional<Reserva> concorrente = reservaRepository.buscarReservaConcorrente(areaId, data, horarioInicio, horarioFim);
+        if(concorrente.isPresent()) throw new BusinessRuleException("Morador não pode solicitar reserva para uma area ja reservada");
         Reserva savedReserva = reservaRepository.save(reserva);
         return reservaRepository.findById(savedReserva.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva nao encontrada apos cadastro"));
