@@ -1,7 +1,11 @@
 package br.com.dunnastecnologia.chamados.infrastructure.controller.api;
 
 import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
+import br.com.dunnastecnologia.chamados.domain.model.Area;
+import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.web.WebControllerSupport;
+import br.com.dunnastecnologia.chamados.infrastructure.controller.web.form.AreaForm;
+import br.com.dunnastecnologia.chamados.infrastructure.exception.BusinessRuleException;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.web.form.AreaForm;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -14,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,5 +66,29 @@ public class AreaApiController {
         adminUseCases.removerArea(support.authenticatedUser(authentication), areaId);
         redirectAttributes.addFlashAttribute("successMessage", "Area removida com sucesso.");
         return "redirect:/admin/areas";
+    }
+
+    @Operation(summary = "Atualiza os dados de uma area", tags = "04 - Admin Web - Areas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302", description = "Area atualizada com sucesso e redirecionamento para o detalhe."),
+            @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
+            @ApiResponse(responseCode = "404", description = "Area nao encontrada.")
+    })
+
+    @PatchMapping("/{areaId}")
+    public String atualizarArea(
+            Authentication authentication,
+            @PathVariable UUID areaId,
+            @ModelAttribute AreaForm areaForm,
+            RedirectAttributes redirectAttributes
+    ) {
+        adminUseCases.atualizarArea(
+                support.authenticatedUser(authentication),
+                areaId,
+                areaForm.getIdentificacao()
+        );
+        redirectAttributes.addFlashAttribute("successMessage", "Area atualizado com sucesso.");
+        return "redirect:/admin/areas/" + areaId;
     }
 }

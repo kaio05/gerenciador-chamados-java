@@ -42,6 +42,7 @@ public class AdminService implements AdminUseCases {
 
     private final BlocoRepository blocoRepository;
     private final AreaService areaService;
+    private final AreaRepository areaRepository;
     private final ReservaRepository reservaRepository;
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
@@ -68,6 +69,7 @@ public class AdminService implements AdminUseCases {
     ) {
         this.blocoRepository = blocoRepository;
         this.areaService = areaService;
+        this.areaRepository = areaRepository;
         this.reservaRepository = reservaRepository;
         this.moradorRepository = moradorRepository;
         this.unidadeRepository = unidadeRepository;
@@ -339,6 +341,18 @@ public class AdminService implements AdminUseCases {
     @Override
     public PageResult<Reserva> listarReservas(PageRequest pageRequest) {
         return PageResultMapper.fromPage(reservaRepository.findAll(pageRequest));
+    }
+
+    @Override
+    public Area buscarAreaPorId(UUID areaId) {
+        return areaRepository.findById(areaId)
+                .orElseThrow(() -> new ResourceNotFoundException("Area nao encontrada"));
+    }
+
+    @Override
+    @Transactional
+    public Area atualizarArea(AuthenticatedUser admin, UUID areaId, String identificacao) {
+        return areaService.atualizarArea(admin, areaId, identificacao);
     }
 
 }

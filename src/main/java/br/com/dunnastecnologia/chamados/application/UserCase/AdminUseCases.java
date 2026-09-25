@@ -308,5 +308,12 @@ public interface AdminUseCases {
             AuthenticatedUser admin,
             UUID areaId
     );
+
+    Area buscarAreaPorId(UUID areaId);
     
+    Area atualizarArea(
+            AuthenticatedUser admin,
+            UUID areaId,
+            String identificacao
+    );
 }

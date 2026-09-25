@@ -2,8 +2,6 @@ package br.com.dunnastecnologia.chamados.application.UserCase;
 
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
-import br.com.dunnastecnologia.chamados.domain.model.Colaborador;
-import br.com.dunnastecnologia.chamados.domain.model.TipoChamado;
 import br.com.dunnastecnologia.chamados.domain.model.Area;
 import org.springframework.data.domain.PageRequest;
 
@@ -16,11 +14,8 @@ public interface AreaUseCase {
             String identificacao
     );
 
-//     Area atualizarArea(
-//             AuthenticatedUser admin,
-//             UUID areaId,
-//             Area area
-//     );
+
+    public Area atualizarArea(AuthenticatedUser admin, UUID areaId, String identificacao);
 
     PageResult<Area> listarAreas(PageRequest pageRequest);
 

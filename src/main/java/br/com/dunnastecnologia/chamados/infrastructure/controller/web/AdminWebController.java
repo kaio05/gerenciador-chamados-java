@@ -637,4 +637,25 @@ public class AdminWebController {
         model.addAttribute("reservasPage", support.pageMetadata(reservas));
         return "admin/reservas/lista";
     }
+
+    @Operation(summary = "Exibe o detalhe de um bloco", tags = "02 - Admin Web - Paginas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Pagina de detalhe do bloco renderizada com sucesso."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
+            @ApiResponse(responseCode = "404", description = "Bloco nao encontrado.")
+    })
+    @GetMapping("/areas/{areaId}")
+    @Transactional(readOnly = true)
+    public String detalharArea(
+            @PathVariable UUID areaId,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "20") Integer size,
+            Model model
+    ) {
+        var area = adminUseCases.buscarAreaPorId(areaId);
+
+        model.addAttribute("pageTitle", "Detalhes da Area");
+        model.addAttribute("area", support.toAreaMap(area));
+        return "admin/areas/detalhe";
+    }
 }

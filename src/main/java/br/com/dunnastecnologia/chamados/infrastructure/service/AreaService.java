@@ -74,4 +74,16 @@ public class AreaService implements AreaUseCase {
         area.setStatus(Area.AreaStatus.DESATIVADA);
         areaRepository.save(area);
     }
+
+    @Override
+    @Transactional
+    public Area atualizarArea(AuthenticatedUser admin, UUID areaId, String identificacao) {
+        authenticatedUserValidator.assertAdministrador(admin);
+
+        Area persistedArea = areaRepository.getReferenceById(areaId);
+
+        persistedArea.setIdentificacao(identificacao);
+
+        return areaRepository.save(persistedArea);
+    }
 }
