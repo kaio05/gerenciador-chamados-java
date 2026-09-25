@@ -3,18 +3,24 @@ package br.com.dunnastecnologia.chamados.infrastructure.service;
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.UserCase.MoradorUseCases;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
+import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.AuthenticatedUserValidator;
 import br.com.dunnastecnologia.chamados.infrastructure.service.support.PageResultMapper;
+import br.com.dunnastecnologia.chamados.infrastructure.exception.ResourceNotFoundException;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.AreaRepository;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.MoradorRepository;
+import br.com.dunnastecnologia.chamados.infrastructure.repository.ReservaRepository;
 import br.com.dunnastecnologia.chamados.infrastructure.repository.UnidadeRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
 
 @Service
@@ -22,6 +28,9 @@ import java.util.UUID;
 public class MoradorService implements MoradorUseCases {
 
     private final UnidadeRepository unidadeRepository;
+    private final AreaRepository areaRepository;
+    private final MoradorRepository moradorRepository;
+    private final ReservaRepository reservaRepository;
     private final ReservaService reservaService;
     private final ChamadoService chamadoService;
     private final ComentarioService comentarioService;
@@ -29,12 +38,18 @@ public class MoradorService implements MoradorUseCases {
 
     public MoradorService(
             UnidadeRepository unidadeRepository,
+            AreaRepository areaRepository,
+            MoradorRepository moradorRepository,
+            ReservaRepository reservaRepository,
             ReservaService reservaService,
             ChamadoService chamadoService,
             ComentarioService comentarioService,
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.unidadeRepository = unidadeRepository;
+        this.areaRepository = areaRepository;
+        this.moradorRepository = moradorRepository;
+        this.reservaRepository = reservaRepository;
         this.reservaService = reservaService;
         this.chamadoService = chamadoService;
         this.comentarioService = comentarioService;
@@ -85,5 +100,25 @@ public class MoradorService implements MoradorUseCases {
     @Override
     public PageResult<Reserva> listarMinhasReservas(AuthenticatedUser morador, PageRequest pageRequest) {
         return reservaService.listarReservasDoMorador(morador, pageRequest);
+    }
+
+    @Override
+    @Transactional
+    public Reserva cadastrarReserva(AuthenticatedUser morador, UUID areaId, LocalDate data, LocalTime horarioInicio, LocalTime horarioFim) {
+        authenticatedUserValidator.assertMorador(morador);
+
+        Reserva reserva = new Reserva();
+        reserva.setArea(areaRepository.getReferenceById(areaId));
+        reserva.setData(data);
+        reserva.setMorador(moradorRepository.getReferenceById(morador.id()));
+        reserva.setHorarioInicio(horarioInicio);
+        reserva.setHorarioFim(horarioFim);
+        reserva.setStatus(Reserva.ReservaStatus.SOLICITADA);
+
+        Area area = areaRepository.findById(areaId)
+        .orElseThrow(() -> new IllegalArgumentException("Área não encontrada"));
+        Reserva savedReserva = reservaRepository.save(reserva);
+        return reservaRepository.findById(savedReserva.getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Reserva nao encontrada apos cadastro"));
     }
 }

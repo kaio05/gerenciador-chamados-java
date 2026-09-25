@@ -303,4 +303,6 @@ public interface AdminUseCases {
     PageResult<Area> listarAreas(PageRequest pageRequest);
     
     PageResult<Reserva> listarReservas(PageRequest pageRequest);
+
+    
 }

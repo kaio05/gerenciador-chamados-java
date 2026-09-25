@@ -188,7 +188,7 @@ public class MoradorWebController {
         );
         return "morador/chamados/detalhe";
     }
-	
+        
 	@GetMapping({"/reservas", "/reservas/"})
 	@Transactional(readOnly = true)
     @Operation(summary = "Lista as reservas do morador com paginacao", tags = "02 - Admin Web - Paginas")

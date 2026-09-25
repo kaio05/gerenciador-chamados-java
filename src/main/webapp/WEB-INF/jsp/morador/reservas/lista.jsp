@@ -18,7 +18,7 @@
                             <h2>Nova reserva</h2>
                         </div>
                     </div>
-                    <form method="post" action="${ctx}/admin/reservas" class="stack-form">
+                    <form method="post" action="${ctx}/morador/reservas" class="stack-form">
                         <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
 
                         <label class="field">
@@ -90,13 +90,21 @@
                                 <table class="data-table" data-filter-table="reservas-table">
                                     <thead>
                                     <tr>
-                                        <th>Identificacao</th>
+                                        <th>Area</th>
+                                        <th>Data</th>
+                                        <th>Horario inicial</th>
+                                        <th>Horario final</th>
+                                        <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${reservas}" var="reserva">
                                         <tr>
-                                            <td>${reserva.id}</td>
+                                            <td>${reserva.areaIdentificacao}</td>
+                                            <td>${reserva.data}</td>
+                                            <td>${reserva.horarioInicio}</td>
+                                            <td>${reserva.horarioFim}</td>
+                                            <td>${reserva.status}</td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>

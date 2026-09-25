@@ -12,10 +12,12 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.GeneratedValue;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.sql.Time;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.UUID;
+
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "reservas")
@@ -36,18 +38,20 @@ public class Reserva {
     private Area area;
 
     @Column(nullable = false)
-    private LocalDateTime data;
+    private LocalDate data;
 
     @Column(nullable = false)
-    private Time horarioInicio;
+    private LocalTime horarioInicio;
 
     @Column(nullable = false)
-    private Time horarioFim;
+    private LocalTime horarioFim;
 
     @Enumerated(EnumType.STRING)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(columnDefinition = "reserva_status")
     private ReservaStatus status;
     
-    private enum ReservaStatus {
+    public enum ReservaStatus {
     SOLICITADA, APROVADA, REJEITADA, CANCELADA;
     }
 }
