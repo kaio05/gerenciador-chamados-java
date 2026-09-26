@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Optional;
 import java.util.UUID;
@@ -108,6 +109,17 @@ public class MoradorService implements MoradorUseCases {
     @Transactional
     public Reserva cadastrarReserva(AuthenticatedUser morador, UUID areaId, LocalDate data, LocalTime horarioInicio, LocalTime horarioFim) {
         authenticatedUserValidator.assertMorador(morador);
+        LocalDateTime reservaInicio = LocalDateTime.of(data, horarioInicio);
+        LocalDateTime reservaFim = LocalDateTime.of(data, horarioFim);
+
+        if(reservaInicio.isBefore(LocalDateTime.now()) || reservaInicio.isAfter(reservaFim))
+            throw new BusinessRuleException("Insira um intervalo de tempo válido.");
+        Area area = areaRepository.findById(areaId)
+        .orElseThrow(() -> new IllegalArgumentException("Área não encontrada"));
+        if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
+            throw new BusinessRuleException("Morador não pode solicitar reserva para uma area desativada ou retirada");
+        Optional<Reserva> concorrente = reservaRepository.buscarReservaConcorrente(areaId, data, horarioInicio, horarioFim);
+        if(concorrente.isPresent()) throw new BusinessRuleException("Morador não pode solicitar reserva para uma area ja reservada");
 
         Reserva reserva = new Reserva();
         reserva.setArea(areaRepository.getReferenceById(areaId));
@@ -117,12 +129,6 @@ public class MoradorService implements MoradorUseCases {
         reserva.setHorarioFim(horarioFim);
         reserva.setStatus(Reserva.ReservaStatus.SOLICITADA);
 
-        Area area = areaRepository.findById(areaId)
-        .orElseThrow(() -> new IllegalArgumentException("Área não encontrada"));
-        if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
-            throw new BusinessRuleException("Morador não pode solicitar reserva para uma area desativada ou retirada");
-        Optional<Reserva> concorrente = reservaRepository.buscarReservaConcorrente(areaId, data, horarioInicio, horarioFim);
-        if(concorrente.isPresent()) throw new BusinessRuleException("Morador não pode solicitar reserva para uma area ja reservada");
         Reserva savedReserva = reservaRepository.save(reserva);
         return reservaRepository.findById(savedReserva.getId())
                 .orElseThrow(() -> new ResourceNotFoundException("Reserva nao encontrada apos cadastro"));
