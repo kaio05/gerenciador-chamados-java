@@ -63,7 +63,7 @@ public class AreaService implements AreaUseCase {
 
     @Override
     public PageResult<Area> listarAreas(PageRequest pageRequest) {
-        return PageResultMapper.fromPage(areaRepository.findAll(pageRequest));
+        return PageResultMapper.fromPage(areaRepository.listarAreasAtivas(pageRequest));
     }
 
     @Override

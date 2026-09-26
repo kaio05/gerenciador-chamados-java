@@ -56,20 +56,18 @@
                                     </thead>
                                     <tbody>
                                     <c:forEach items="${areas}" var="area">
-                                        <c:if test="${area.status eq 'ATIVA'}">
-                                            <tr>
-                                                <td>${area.status}</td>
-                                                <td>${area.identificacao}</td>
-                                                <td class="cell-actions">
-                                                    <a href="${ctx}/admin/areas/${area.id}" class="btn btn-link">Gerenciar</a>
-                                                    <form method="post" action="${ctx}/admin/areas/${area.id}" onsubmit="return confirm('Deseja desativar esta area?');">
-                                                        <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
-                                                        <input type="hidden" name="_method" value="delete">
-                                                        <button type="submit" class="btn btn-secondary">Desativar</button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        </c:if>
+                                        <tr>
+                                            <td>${area.status}</td>
+                                            <td>${area.identificacao}</td>
+                                            <td class="cell-actions">
+                                                <a href="${ctx}/admin/areas/${area.id}" class="btn btn-link">Gerenciar</a>
+                                                <form method="post" action="${ctx}/admin/areas/${area.id}" onsubmit="return confirm('Deseja desativar esta area?');">
+                                                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+                                                    <input type="hidden" name="_method" value="delete">
+                                                    <button type="submit" class="btn btn-secondary">Desativar</button>
+                                                </form>
+                                            </td>
+                                        </tr>
                                     </c:forEach>
                                     </tbody>
                                 </table>
