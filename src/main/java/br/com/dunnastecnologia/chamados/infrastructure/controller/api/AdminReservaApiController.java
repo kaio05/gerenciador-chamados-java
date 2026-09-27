@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
@@ -41,9 +42,10 @@ public class AdminReservaApiController {
     public String rejeitarReserva(
             Authentication authentication,
             @PathVariable UUID reservaId,
+            @RequestParam String motivo,
             RedirectAttributes redirectAttributes
     ) {
-        adminUseCases.rejeitarReserva(support.authenticatedUser(authentication), reservaId);
+        adminUseCases.rejeitarReserva(support.authenticatedUser(authentication), reservaId, motivo);
         redirectAttributes.addFlashAttribute("successMessage", "Reserva rejeitada com sucesso.");
         return "redirect:/admin/reservas";
     }

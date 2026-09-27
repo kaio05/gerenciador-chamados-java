@@ -46,6 +46,9 @@ public class Reserva {
     @Column(nullable = false)
     private LocalTime horarioFim;
 
+    @Column(nullable = false)
+    private String motivoCancelamento;
+
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(columnDefinition = "reserva_status")

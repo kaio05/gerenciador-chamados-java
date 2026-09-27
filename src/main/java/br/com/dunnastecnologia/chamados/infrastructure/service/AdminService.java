@@ -2,6 +2,12 @@ package br.com.dunnastecnologia.chamados.infrastructure.service;
 
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
+import br.com.dunnastecnologia.chamados.application.UserCase.AreaUseCase;
+import br.com.dunnastecnologia.chamados.application.UserCase.ChamadoUseCase;
+import br.com.dunnastecnologia.chamados.application.UserCase.ComentarioUseCase;
+import br.com.dunnastecnologia.chamados.application.UserCase.ReservaUseCase;
+import br.com.dunnastecnologia.chamados.application.UserCase.TipoChamadoUseCase;
+import br.com.dunnastecnologia.chamados.application.UserCase.UsuarioUseCase;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
 import br.com.dunnastecnologia.chamados.domain.model.Bloco;
 import br.com.dunnastecnologia.chamados.domain.model.Area;
@@ -41,32 +47,32 @@ import java.util.UUID;
 public class AdminService implements AdminUseCases {
 
     private final BlocoRepository blocoRepository;
-    private final AreaService areaService;
+    private final AreaUseCase areaService;
     private final AreaRepository areaRepository;
     private final ReservaRepository reservaRepository;
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
-    private final UsuarioService usuarioService;
-    private final ReservaService reservaService;
-    private final TipoChamadoService tipoChamadoService;
+    private final UsuarioUseCase usuarioService;
+    private final ReservaUseCase reservaService;
+    private final TipoChamadoUseCase tipoChamadoService;
     private final StatusChamadoService statusChamadoService;
-    private final ChamadoService chamadoService;
-    private final ComentarioService comentarioService;
+    private final ChamadoUseCase chamadoService;
+    private final ComentarioUseCase comentarioService;
     private final AuthenticatedUserValidator authenticatedUserValidator;
 
     public AdminService(
             BlocoRepository blocoRepository,
             AreaRepository areaRepository,
-            AreaService areaService,
+            AreaUseCase areaService,
             ReservaRepository reservaRepository,
             MoradorRepository moradorRepository,
             UnidadeRepository unidadeRepository,
-            UsuarioService usuarioService,
-            ReservaService reservaService,
-            TipoChamadoService tipoChamadoService,
+            UsuarioUseCase usuarioService,
+            ReservaUseCase reservaService,
+            TipoChamadoUseCase tipoChamadoService,
             StatusChamadoService statusChamadoService,
-            ChamadoService chamadoService,
-            ComentarioService comentarioService,
+            ChamadoUseCase chamadoService,
+            ComentarioUseCase comentarioService,
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.blocoRepository = blocoRepository;
@@ -360,8 +366,8 @@ public class AdminService implements AdminUseCases {
 
     @Override
     @Transactional 
-    public void rejeitarReserva(AuthenticatedUser admin, UUID reservaId) {
-        reservaService.rejeitarReserva(admin, reservaId);
+    public void rejeitarReserva(AuthenticatedUser admin, UUID reservaId, String motivo) {
+        reservaService.rejeitarReserva(admin, reservaId, motivo);
     }
 
     @Override

@@ -54,11 +54,31 @@
                                                     <input type="hidden" name="_method" value="patch">
                                                     <button type="submit" class="btn btn-secondary">Aprovar</button>
                                                 </form>
-                                                <form method="post" action="${ctx}/admin/reservas/${reserva.id}" onsubmit="return confirm('Deseja rejeitar esta reserva?');">
+                                                <form method="post"
+                                                    action="${ctx}/admin/reservas/${reserva.id}"
+                                                    onsubmit="return setMotivoRejeicao(this);">
+
                                                     <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+
                                                     <input type="hidden" name="_method" value="delete">
+                                                    <input type="hidden" name="motivo">
+
                                                     <button type="submit" class="btn btn-secondary">Rejeitar</button>
                                                 </form>
+
+                                                <script>
+                                                function setMotivoRejeicao(form) {
+                                                    const motivo = prompt('Por qual motivo deseja rejeitar esta reserva?');
+
+                                                    if (motivo === null || motivo.trim() === '') {
+                                                        return false;
+                                                    }
+
+                                                    form.elements['motivo'].value = motivo;
+
+                                                    return true;
+                                                }
+                                                </script>
                                             </td>
                                         </tr>
                                     </c:forEach>

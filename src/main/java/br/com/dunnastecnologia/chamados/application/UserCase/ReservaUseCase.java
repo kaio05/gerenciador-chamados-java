@@ -16,7 +16,7 @@ public interface ReservaUseCase {
             PageRequest pageRequest
     );
 
-    void rejeitarReserva(AuthenticatedUser admin, UUID reservaId);
+    void rejeitarReserva(AuthenticatedUser admin, UUID reservaId, String motivo);
 
     void cancelarReserva(AuthenticatedUser morador, UUID reservaId);
 

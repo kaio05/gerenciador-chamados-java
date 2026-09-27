@@ -319,7 +319,8 @@ public interface AdminUseCases {
 
     void rejeitarReserva(
             AuthenticatedUser morador,
-            UUID reservaId
+            UUID reservaId,
+            String motivo
     );
 
     void aprovarReserva(
