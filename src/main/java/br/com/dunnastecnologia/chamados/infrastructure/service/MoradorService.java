@@ -31,9 +31,6 @@ import java.util.UUID;
 public class MoradorService implements MoradorUseCases {
 
     private final UnidadeRepository unidadeRepository;
-    private final AreaRepository areaRepository;
-    private final MoradorRepository moradorRepository;
-    private final ReservaRepository reservaRepository;
     private final ReservaService reservaService;
     private final ChamadoService chamadoService;
     private final ComentarioService comentarioService;
@@ -50,9 +47,6 @@ public class MoradorService implements MoradorUseCases {
             AuthenticatedUserValidator authenticatedUserValidator
     ) {
         this.unidadeRepository = unidadeRepository;
-        this.areaRepository = areaRepository;
-        this.moradorRepository = moradorRepository;
-        this.reservaRepository = reservaRepository;
         this.reservaService = reservaService;
         this.chamadoService = chamadoService;
         this.comentarioService = comentarioService;
@@ -108,29 +102,12 @@ public class MoradorService implements MoradorUseCases {
     @Override
     @Transactional
     public Reserva cadastrarReserva(AuthenticatedUser morador, UUID areaId, LocalDate data, LocalTime horarioInicio, LocalTime horarioFim) {
-        authenticatedUserValidator.assertMorador(morador);
-        LocalDateTime reservaInicio = LocalDateTime.of(data, horarioInicio);
-        LocalDateTime reservaFim = LocalDateTime.of(data, horarioFim);
+        return reservaService.cadastrarReserva(morador, areaId, data, horarioInicio, horarioFim);
+    }
 
-        if(reservaInicio.isBefore(LocalDateTime.now()) || reservaInicio.isAfter(reservaFim))
-            throw new BusinessRuleException("Insira um intervalo de tempo válido.");
-        Area area = areaRepository.findById(areaId)
-        .orElseThrow(() -> new IllegalArgumentException("Área não encontrada"));
-        if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
-            throw new BusinessRuleException("Morador não pode solicitar reserva para uma area desativada ou retirada");
-        Optional<Reserva> concorrente = reservaRepository.buscarReservaConcorrente(areaId, data, horarioInicio, horarioFim);
-        if(concorrente.isPresent()) throw new BusinessRuleException("Morador não pode solicitar reserva para uma area ja reservada");
-
-        Reserva reserva = new Reserva();
-        reserva.setArea(areaRepository.getReferenceById(areaId));
-        reserva.setData(data);
-        reserva.setMorador(moradorRepository.getReferenceById(morador.id()));
-        reserva.setHorarioInicio(horarioInicio);
-        reserva.setHorarioFim(horarioFim);
-        reserva.setStatus(Reserva.ReservaStatus.SOLICITADA);
-
-        Reserva savedReserva = reservaRepository.save(reserva);
-        return reservaRepository.findById(savedReserva.getId())
-                .orElseThrow(() -> new ResourceNotFoundException("Reserva nao encontrada apos cadastro"));
+    @Override
+    @Transactional 
+    public void cancelarReserva(AuthenticatedUser morador, UUID reservaId) {
+        reservaService.cancelarReserva(morador, reservaId);
     }
 }

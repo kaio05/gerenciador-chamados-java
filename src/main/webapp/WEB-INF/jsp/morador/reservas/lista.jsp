@@ -105,6 +105,13 @@
                                             <td>${reserva.data}</td>
                                             <td>${reserva.horarioInicio}</td>
                                             <td>${reserva.horarioFim}</td>
+                                            <td class="cell-actions">
+                                                <form method="post" action="${ctx}/morador/reservas/${reserva.id}" onsubmit="return confirm('Deseja cancelar esta reserva?');">
+                                                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+                                                    <input type="hidden" name="_method" value="delete">
+                                                    <button type="submit" class="btn btn-secondary">Cancelar</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>
@@ -115,11 +122,11 @@
 
                     <div class="pagination">
                         <c:if test="${reservasPage.hasPrevious}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page - 1}&size=${reservasPage.size}">Anterior</a>
+                            <a class="btn btn-secondary" href="${ctx}/morador/reservas?page=${reservasPage.page - 1}&size=${reservasPage.size}">Anterior</a>
                         </c:if>
                         <span>Pagina ${reservasPage.page + 1} de ${reservasPage.totalPages == 0 ? 1 : reservasPage.totalPages}</span>
                         <c:if test="${reservasPage.hasNext}">
-                            <a class="btn btn-secondary" href="${ctx}/admin/reservas?page=${reservasPage.page + 1}&size=${reservasPage.size}">Proxima</a>
+                            <a class="btn btn-secondary" href="${ctx}/morador/reservas?page=${reservasPage.page + 1}&size=${reservasPage.size}">Proxima</a>
                         </c:if>
                     </div>
                 </article>

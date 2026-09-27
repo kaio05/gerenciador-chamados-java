@@ -1,2 +1,0 @@
-ALTER TABLE reservas
-ALTER COLUMN data TYPE DATE;

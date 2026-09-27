@@ -47,6 +47,7 @@ public class AdminService implements AdminUseCases {
     private final MoradorRepository moradorRepository;
     private final UnidadeRepository unidadeRepository;
     private final UsuarioService usuarioService;
+    private final ReservaService reservaService;
     private final TipoChamadoService tipoChamadoService;
     private final StatusChamadoService statusChamadoService;
     private final ChamadoService chamadoService;
@@ -61,6 +62,7 @@ public class AdminService implements AdminUseCases {
             MoradorRepository moradorRepository,
             UnidadeRepository unidadeRepository,
             UsuarioService usuarioService,
+            ReservaService reservaService,
             TipoChamadoService tipoChamadoService,
             StatusChamadoService statusChamadoService,
             ChamadoService chamadoService,
@@ -74,6 +76,7 @@ public class AdminService implements AdminUseCases {
         this.moradorRepository = moradorRepository;
         this.unidadeRepository = unidadeRepository;
         this.usuarioService = usuarioService;
+        this.reservaService = reservaService;
         this.tipoChamadoService = tipoChamadoService;
         this.statusChamadoService = statusChamadoService;
         this.chamadoService = chamadoService;
@@ -353,6 +356,18 @@ public class AdminService implements AdminUseCases {
     @Transactional
     public Area atualizarArea(AuthenticatedUser admin, UUID areaId, String identificacao) {
         return areaService.atualizarArea(admin, areaId, identificacao);
+    }
+
+    @Override
+    @Transactional 
+    public void rejeitarReserva(AuthenticatedUser admin, UUID reservaId) {
+        reservaService.rejeitarReserva(admin, reservaId);
+    }
+
+    @Override
+    @Transactional 
+    public void aprovarReserva(AuthenticatedUser admin, UUID reservaId) {
+        reservaService.aprovarReserva(admin, reservaId);
     }
 
 }

@@ -2,14 +2,12 @@ package br.com.dunnastecnologia.chamados.application.UserCase;
 
 import br.com.dunnastecnologia.chamados.application.Security.AuthenticatedUser;
 import br.com.dunnastecnologia.chamados.application.pagination.PageResult;
-import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.domain.model.Chamado;
 import br.com.dunnastecnologia.chamados.domain.model.Comentario;
 import br.com.dunnastecnologia.chamados.domain.model.Reserva;
 import br.com.dunnastecnologia.chamados.domain.model.Unidade;
 import org.springframework.data.domain.PageRequest;
 
-import java.time.LocalDate;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.UUID;
@@ -80,5 +78,10 @@ public interface MoradorUseCases {
             LocalDate data,
             LocalTime horarioInicio,
             LocalTime horarioFim
+    );
+
+    void cancelarReserva(
+            AuthenticatedUser morador,
+            UUID reservaId
     );
 }

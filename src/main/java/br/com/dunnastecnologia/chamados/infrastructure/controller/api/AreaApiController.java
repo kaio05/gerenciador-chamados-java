@@ -57,6 +57,13 @@ public class AreaApiController {
         return "redirect:/admin/areas";
     }
 
+    @Operation(summary = "Remove uma area", tags = "06 - Admin Web - Areas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302", description = "area removida com sucesso e redirecionamento para a tela de origem."),
+            @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
+            @ApiResponse(responseCode = "404", description = "Area nao encontrada.")
+    })
     @DeleteMapping("/{areaId}")
     public String removerArea(
             Authentication authentication,
@@ -75,7 +82,6 @@ public class AreaApiController {
             @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
             @ApiResponse(responseCode = "404", description = "Area nao encontrada.")
     })
-
     @PatchMapping("/{areaId}")
     public String atualizarArea(
             Authentication authentication,

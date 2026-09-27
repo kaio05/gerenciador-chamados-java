@@ -10,7 +10,7 @@
         <main class="page-content">
             <%@ include file="/WEB-INF/jsp/fragments/alerts.jspf" %>
 
-            <section class="two-column-grid">
+            <section class="one-column-grid">
                 <article class="card">
                     <div class="section-header">
                         <div>
@@ -48,6 +48,18 @@
                                             <td>${reserva.data}</td>
                                             <td>${reserva.horarioInicio}</td>
                                             <td>${reserva.horarioFim}</td>
+                                            <td class="cell-actions">
+                                                <form method="post" action="${ctx}/admin/reservas/${reserva.id}" onsubmit="return confirm('Deseja aprovar esta reserva?');">
+                                                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+                                                    <input type="hidden" name="_method" value="patch">
+                                                    <button type="submit" class="btn btn-secondary">Aprovar</button>
+                                                </form>
+                                                <form method="post" action="${ctx}/admin/reservas/${reserva.id}" onsubmit="return confirm('Deseja rejeitar esta reserva?');">
+                                                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+                                                    <input type="hidden" name="_method" value="delete">
+                                                    <button type="submit" class="btn btn-secondary">Rejeitar</button>
+                                                </form>
+                                            </td>
                                         </tr>
                                     </c:forEach>
                                     </tbody>

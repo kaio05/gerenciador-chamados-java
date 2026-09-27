@@ -316,4 +316,14 @@ public interface AdminUseCases {
             UUID areaId,
             String identificacao
     );
+
+    void rejeitarReserva(
+            AuthenticatedUser morador,
+            UUID reservaId
+    );
+
+    void aprovarReserva(
+            AuthenticatedUser morador,
+            UUID reservaId
+    );
 }
