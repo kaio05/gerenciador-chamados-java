@@ -50,6 +50,17 @@ public class AdminReservaApiController {
         return "redirect:/admin/reservas";
     }
 
+    @DeleteMapping("/cancelar/{reservaId}")
+    public String cancelarReserva(
+            Authentication authentication,
+            @PathVariable UUID reservaId,
+            RedirectAttributes redirectAttributes
+    ) {
+        adminUseCases.cancelarReserva(support.authenticatedUser(authentication), reservaId);
+        redirectAttributes.addFlashAttribute("successMessage", "Reserva cancelada com sucesso.");
+        return "redirect:/admin/reservas";
+    }
+
     @PatchMapping ("/{reservaId}")
     public String aprovarReserva(
             Authentication authentication,

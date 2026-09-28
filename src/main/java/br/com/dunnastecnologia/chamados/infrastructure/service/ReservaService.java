@@ -77,7 +77,7 @@ public class ReservaService implements ReservaUseCase {
         reserva.setMorador(moradorRepository.getReferenceById(morador.id()));
 
         if(!reserva.getMorador().getAtivo()) throw new BusinessRuleException("Um morador inativo nao pode fazer uma reserva");
-        
+
         reserva.setHorarioInicio(horarioInicio);
         reserva.setHorarioFim(horarioFim);
         reserva.setStatus(Reserva.ReservaStatus.SOLICITADA);
@@ -105,9 +105,27 @@ public class ReservaService implements ReservaUseCase {
 
     @Override
     @Transactional
-    public void cancelarReserva(AuthenticatedUser morador, UUID reservaId) {
+    public void cancelarReservaMorador(AuthenticatedUser morador, UUID reservaId) {
         authenticatedUserValidator.assertMorador(morador);
+        cancelarReserva(reservaId);
+    }
+
+    @Override
+    @Transactional
+    public void cancelarReservaAdmin(AuthenticatedUser admin, UUID reservaId) {
+        authenticatedUserValidator.assertAdministrador(admin);
+        cancelarReserva(reservaId);
+    }
+
+    @Transactional
+    private void cancelarReserva(UUID reservaId) {
         Reserva reserva = reservaRepository.getReferenceById(reservaId);
+
+        if(reserva.getStatus() == Reserva.ReservaStatus.REJEITADA) throw new BusinessRuleException("Nao se pode cancelar uma reserva rejeitada");
+
+        LocalDateTime reservaInicio = LocalDateTime.of(reserva.getData(), reserva.getHorarioInicio());
+        if(reservaInicio.isBefore(LocalDateTime.now()))
+            throw new BusinessRuleException("O horario desta reserva ja expirou.");
         reserva.setStatus(Reserva.ReservaStatus.CANCELADA);
         reservaRepository.save(reserva);
     }
@@ -119,8 +137,7 @@ public class ReservaService implements ReservaUseCase {
         Reserva reserva = reservaRepository.getReferenceById(reservaId);
 
         LocalDateTime reservaInicio = LocalDateTime.of(reserva.getData(), reserva.getHorarioInicio());
-        LocalDateTime reservaFim = LocalDateTime.of(reserva.getData(), reserva.getHorarioFim());
-        if(reservaInicio.isBefore(LocalDateTime.now()) || reservaInicio.isAfter(reservaFim))
+        if(reservaInicio.isBefore(LocalDateTime.now()))
             throw new BusinessRuleException("O horario desta reserva ja expirou.");
         Area area = areaRepository.findById(reserva.getArea().getId())
         .orElseThrow(() -> new IllegalArgumentException("Área nao encontrada"));

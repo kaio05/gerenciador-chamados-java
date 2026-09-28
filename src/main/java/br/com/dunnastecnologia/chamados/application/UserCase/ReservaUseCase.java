@@ -18,7 +18,9 @@ public interface ReservaUseCase {
 
     void rejeitarReserva(AuthenticatedUser admin, UUID reservaId, String motivo);
 
-    void cancelarReserva(AuthenticatedUser morador, UUID reservaId);
+    void cancelarReservaAdmin(AuthenticatedUser admin, UUID reservaId);
+
+    void cancelarReservaMorador(AuthenticatedUser morador, UUID reservaId);
 
     void aprovarReserva(AuthenticatedUser morador, UUID reservaId);
 }

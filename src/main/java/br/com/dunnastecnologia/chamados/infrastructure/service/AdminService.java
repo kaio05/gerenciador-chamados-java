@@ -376,4 +376,10 @@ public class AdminService implements AdminUseCases {
         reservaService.aprovarReserva(admin, reservaId);
     }
 
+    @Override
+    @Transactional 
+    public void cancelarReserva(AuthenticatedUser admin, UUID reservaId) {
+        reservaService.cancelarReservaAdmin(admin, reservaId);
+    }
+
 }

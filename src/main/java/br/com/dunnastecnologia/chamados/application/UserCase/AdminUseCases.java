@@ -318,13 +318,18 @@ public interface AdminUseCases {
     );
 
     void rejeitarReserva(
-            AuthenticatedUser morador,
+            AuthenticatedUser admin,
             UUID reservaId,
             String motivo
     );
 
     void aprovarReserva(
-            AuthenticatedUser morador,
+            AuthenticatedUser admin,
+            UUID reservaId
+    );
+
+    void cancelarReserva(
+            AuthenticatedUser admin,
             UUID reservaId
     );
 }

@@ -108,6 +108,6 @@ public class MoradorService implements MoradorUseCases {
     @Override
     @Transactional 
     public void cancelarReserva(AuthenticatedUser morador, UUID reservaId) {
-        reservaService.cancelarReserva(morador, reservaId);
+        reservaService.cancelarReservaMorador(morador, reservaId);
     }
 }

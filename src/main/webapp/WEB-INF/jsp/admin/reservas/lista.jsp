@@ -65,7 +65,16 @@
 
                                                     <button type="submit" class="btn btn-secondary">Rejeitar</button>
                                                 </form>
+                                                <form method="post"
+                                                    action="${ctx}/admin/reservas/cancelar/${reserva.id}"
+                                                    onsubmit="return confirm('Deseja cancelar esta reserva?');">
 
+                                                    <%@ include file="/WEB-INF/jsp/fragments/csrf.jspf" %>
+
+                                                    <input type="hidden" name="_method" value="delete">
+
+                                                    <button type="submit" class="btn btn-secondary">Cancelar</button>
+                                                </form>
                                                 <script>
                                                 function setMotivoRejeicao(form) {
                                                     const motivo = prompt('Por qual motivo deseja rejeitar esta reserva?');
