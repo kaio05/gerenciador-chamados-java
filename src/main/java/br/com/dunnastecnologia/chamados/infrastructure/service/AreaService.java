@@ -80,9 +80,16 @@ public class AreaService implements AreaUseCase {
     public Area atualizarArea(AuthenticatedUser admin, UUID areaId, String identificacao) {
         authenticatedUserValidator.assertAdministrador(admin);
 
+        String identificacaoNormalizada = InputValidationSupport.normalizeRequiredText(
+            identificacao,
+            "Identificacao da area e obrigatoria",
+            "Identificacao da area deve ter no maximo 255 caracteres",
+            ValidationLimits.AREA_IDENTIFICACAO_MAX_LENGTH
+        );
+
         Area persistedArea = areaRepository.getReferenceById(areaId);
 
-        persistedArea.setIdentificacao(identificacao);
+        persistedArea.setIdentificacao(identificacaoNormalizada);
 
         return areaRepository.save(persistedArea);
     }

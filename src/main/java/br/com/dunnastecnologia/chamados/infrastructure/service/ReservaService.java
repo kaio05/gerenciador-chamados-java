@@ -62,8 +62,9 @@ public class ReservaService implements ReservaUseCase {
         LocalDateTime reservaInicio = LocalDateTime.of(data, horarioInicio);
         LocalDateTime reservaFim = LocalDateTime.of(data, horarioFim);
 
-        if(reservaInicio.isBefore(LocalDateTime.now()) || reservaInicio.isAfter(reservaFim))
+        if (!reservaFim.isAfter(reservaInicio) || reservaInicio.isBefore(LocalDateTime.now()))
             throw new BusinessRuleException("Insira um intervalo de tempo valido.");
+
         Area area = areaRepository.findById(areaId)
         .orElseThrow(() -> new IllegalArgumentException("Área nao encontrada"));
         if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
@@ -107,6 +108,8 @@ public class ReservaService implements ReservaUseCase {
     @Transactional
     public void cancelarReservaMorador(AuthenticatedUser morador, UUID reservaId) {
         authenticatedUserValidator.assertMorador(morador);
+        Reserva reserva = reservaRepository.getReferenceById(reservaId);
+        if(reserva.getStatus() == Reserva.ReservaStatus.CANCELADA) throw new BusinessRuleException("Nao se pode cancelar uma reserva ja cancelada");
         cancelarReserva(reservaId);
     }
 
@@ -147,7 +150,7 @@ public class ReservaService implements ReservaUseCase {
         if(area.getStatus() == Area.AreaStatus.DESATIVADA || area.getStatus() == Area.AreaStatus.RETIRADA)
             throw new BusinessRuleException("Morador nao pode solicitar reserva para uma area desativada ou retirada");
 
-        if(reserva.getStatus() == Reserva.ReservaStatus.CANCELADA || reserva.getStatus() == Reserva.ReservaStatus.REJEITADA) throw new BusinessRuleException("Nao se pode aprovar uma reserva cancelada ou rejeitada");
+        if(reserva.getStatus() != Reserva.ReservaStatus.SOLICITADA) throw new BusinessRuleException("Nao se pode aprovar uma reserva cancelada, rejeitada ou ja aprovada");
         
         Optional<Reserva> concorrente = reservaRepository.buscarReservaConcorrente(reserva.getArea().getId(), reserva.getData(), reserva.getHorarioInicio(), reserva.getHorarioFim());
         if(concorrente.isPresent()) throw new BusinessRuleException("Nao se pode aprovar uma reserva para uma area ja reservada");
