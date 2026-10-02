@@ -31,7 +31,7 @@ public class AdminReservaApiController {
         this.support = support;
     }
 
-    @Operation(summary = "Rejeita uma reserva", tags = "06 - Morador Web - Reservas")
+    @Operation(summary = "Rejeita uma reserva", tags = "16 - Admin Web - Reservas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "reserva rejeitada com sucesso e redirecionamento para a tela de origem."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
@@ -50,6 +50,13 @@ public class AdminReservaApiController {
         return "redirect:/admin/reservas";
     }
 
+    @Operation(summary = "Cancela uma reserva", tags = "16 - Admin Web - Reservas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302", description = "reserva cancelada com sucesso e redirecionamento para a tela de origem."),
+            @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
+            @ApiResponse(responseCode = "404", description = "Reserva nao encontrada.")
+    })
     @DeleteMapping("/cancelar/{reservaId}")
     public String cancelarReserva(
             Authentication authentication,
@@ -61,6 +68,13 @@ public class AdminReservaApiController {
         return "redirect:/admin/reservas";
     }
 
+    @Operation(summary = "Aprova uma reserva", tags = "16 - Admin Web - Reservas")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "302", description = "Reserva aprovada com sucesso e redirecionamento para o detalhe."),
+            @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
+            @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
+            @ApiResponse(responseCode = "404", description = "Chamado ou status nao encontrado.")
+    })
     @PatchMapping ("/{reservaId}")
     public String aprovarReserva(
             Authentication authentication,

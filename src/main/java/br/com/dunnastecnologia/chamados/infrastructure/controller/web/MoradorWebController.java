@@ -193,7 +193,7 @@ public class MoradorWebController {
         
 	@GetMapping({"/reservas", "/reservas/"})
 	@Transactional(readOnly = true)
-    @Operation(summary = "Lista as reservas do morador com paginacao", tags = "02 - Admin Web - Paginas")
+    @Operation(summary = "Lista as reservas do morador com paginacao", tags = "12 - Morador Web - Paginas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Pagina de listagem de reservas renderizada com sucesso."),
             @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado.")

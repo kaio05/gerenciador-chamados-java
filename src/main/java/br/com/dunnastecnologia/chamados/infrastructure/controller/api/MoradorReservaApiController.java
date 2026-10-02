@@ -32,7 +32,7 @@ public class MoradorReservaApiController {
         this.support = support;
     }
 
-    @Operation(summary = "Cadastra uma nova reserva", tags = "03 - Admin Web - Reservas")
+    @Operation(summary = "Cadastra uma nova reserva", tags = "14 - Morador Web - Reservas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "Reserva cadastrada com sucesso e redirecionamento para a listagem."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
@@ -55,7 +55,7 @@ public class MoradorReservaApiController {
         return "redirect:/morador/reservas";
     }
 
-    @Operation(summary = "Cancela uma reserva", tags = "06 - Morador Web - Reservas")
+    @Operation(summary = "Cancela uma reserva", tags = "14 - Morador Web - Reservas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "reserva cancelada com sucesso e redirecionamento para a tela de origem."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),

@@ -638,11 +638,11 @@ public class AdminWebController {
         return "admin/reservas/lista";
     }
 
-    @Operation(summary = "Exibe o detalhe de um bloco", tags = "02 - Admin Web - Paginas")
+    @Operation(summary = "Exibe o detalhe de uma area", tags = "02 - Admin Web - Paginas")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Pagina de detalhe do bloco renderizada com sucesso."),
+            @ApiResponse(responseCode = "200", description = "Pagina de detalhe da area renderizada com sucesso."),
             @ApiResponse(responseCode = "403", description = "Acesso negado para o perfil autenticado."),
-            @ApiResponse(responseCode = "404", description = "Bloco nao encontrado.")
+            @ApiResponse(responseCode = "404", description = "Area nao encontrada.")
     })
     @GetMapping("/areas/{areaId}")
     @Transactional(readOnly = true)

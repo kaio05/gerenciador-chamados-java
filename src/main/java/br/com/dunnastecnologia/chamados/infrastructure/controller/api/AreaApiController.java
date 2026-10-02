@@ -1,11 +1,7 @@
 package br.com.dunnastecnologia.chamados.infrastructure.controller.api;
 
 import br.com.dunnastecnologia.chamados.application.UserCase.AdminUseCases;
-import br.com.dunnastecnologia.chamados.domain.model.Area;
-import br.com.dunnastecnologia.chamados.domain.model.Area;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.web.WebControllerSupport;
-import br.com.dunnastecnologia.chamados.infrastructure.controller.web.form.AreaForm;
-import br.com.dunnastecnologia.chamados.infrastructure.exception.BusinessRuleException;
 import br.com.dunnastecnologia.chamados.infrastructure.controller.web.form.AreaForm;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +33,7 @@ public class AreaApiController {
         this.support = support;
     }
 
-    @Operation(summary = "Cadastra uma nova area", tags = "03 - Admin Web - Areas")
+    @Operation(summary = "Cadastra uma nova area", tags = "15 - Admin Web - Areas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "Area cadastrada com sucesso e redirecionamento para a listagem."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
@@ -57,7 +53,7 @@ public class AreaApiController {
         return "redirect:/admin/areas";
     }
 
-    @Operation(summary = "Remove uma area", tags = "06 - Admin Web - Areas")
+    @Operation(summary = "Remove uma area", tags = "15 - Admin Web - Areas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "area removida com sucesso e redirecionamento para a tela de origem."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
@@ -75,7 +71,7 @@ public class AreaApiController {
         return "redirect:/admin/areas";
     }
 
-    @Operation(summary = "Atualiza os dados de uma area", tags = "04 - Admin Web - Areas")
+    @Operation(summary = "Atualiza os dados de uma area", tags = "15 - Admin Web - Areas")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "Area atualizada com sucesso e redirecionamento para o detalhe."),
             @ApiResponse(responseCode = "400", description = "Dados informados sao invalidos ou violam regra de negocio."),
