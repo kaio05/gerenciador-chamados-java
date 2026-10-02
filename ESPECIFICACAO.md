@@ -53,8 +53,8 @@ Para as reservas, foi mais complexo. O processo começou igual, com a página de
 A primeira coisa que verifiquei no código recebido, foram os testes. Percebi que todos estavam com os caminhos dos pacotes errados, então corrigi, além de adicionar as importações que faltavam.
 
 ### Uso de IA generativa
-- Ferramentas: ChatGPT e Gemini
-- Uso: Sugentão e validação dos casos de teste da nova funcionalidade
+- Ferramentas: ChatGPT e Gemini;
+- Uso: Sugentão e validação dos casos de teste da nova funcionalidade.
 
 Pedi que o ChatGPT realizasse alguns testes com base nas regras estabelecidas no desafio. Pedi que o Gemini que identificasse falhas nos testes gerados.
 Removi testes redundantes e que não seguiam os padrões do JUnit 5. Também reescrevi testes que não batiam com a arquitetura da aplicação.
